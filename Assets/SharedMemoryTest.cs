@@ -13,11 +13,10 @@ public struct MeshInfo
     public int meshId, numVertices, numFaceIndices;
 }
 
-
 [StructLayout(LayoutKind.Sequential)]
 public struct Vector3fArray
 {
-    [MarshalAs(UnmanagedType.ByValArray, SizeConst = 10)]
+    [MarshalAs(UnmanagedType.ByValArray, SizeConst = 100000)]
     public Vector3[] vectors;
 }
 
@@ -50,12 +49,27 @@ public class SharedMemoryTest : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (accessor != null)
+        if (Input.anyKeyDown)
         {
-            ReadSharedMemory();
+            if (accessor != null)
+            {
+                ReadSharedMemory();
+                UpdateMesh();
+            }
         }
     }
 
+    public void UpdateMesh()
+    {
+        Mesh mesh = GetComponent<MeshFilter>().mesh;
+
+        Vector3[] vertices = mesh.vertices;
+
+        //Re-assign the modified mesh
+        mesh.vertices = vvdata.vectors;
+        mesh.RecalculateBounds();
+    }
+    
     public void ReadSharedMemory()
     {
         /*
@@ -95,6 +109,8 @@ public class SharedMemoryTest : MonoBehaviour
 
         vvaccessor.Read<Vector3fArray>(0, out vvdata);
         Debug.Log("Vector (" + vvdata.vectors[0].x + ", " + vvdata.vectors[0].y + ", " + vvdata.vectors[1].z + ")" );
+        
+        
         
         /*
         vvaccessor.Read<Vector3>(3 * sizeof(float), out vvdata);
