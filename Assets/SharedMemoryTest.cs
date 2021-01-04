@@ -13,19 +13,13 @@ public struct MeshInfo
     public int meshId, numVertices, numFaceIndices;
 }
 
-/*
-[StructLayout(LayoutKind.Sequential)]
-public struct Vector3f
-{
-    public float x, y, z;
-}
 
+[StructLayout(LayoutKind.Sequential)]
 public struct Vector3fArray
 {
     [MarshalAs(UnmanagedType.ByValArray, SizeConst = 10)]
-    public Vector3f[] vectors;
+    public Vector3[] vectors;
 }
-*/
 
 public class SharedMemoryTest : MonoBehaviour
 {
@@ -39,11 +33,17 @@ public class SharedMemoryTest : MonoBehaviour
     MemoryMappedViewAccessor vaccessor;
     private Vector3 vdata;
     
+    private static Mutex vvmut;
+    MemoryMappedFile vvmemMapFile;
+    MemoryMappedViewAccessor vvaccessor;
+    private Vector3fArray vvdata;
+    
     // Start is called before the first frame update
     void Start()
     {
         mut = new Mutex(false, "NameOfMutexObject");
         vmut = new Mutex(false, "VERTICES_MUTEX");
+        vvmut = new Mutex(false, "VERTICES_ARRAY_MUTEX");
         InitSharedMemory();
     }
 
@@ -58,6 +58,7 @@ public class SharedMemoryTest : MonoBehaviour
 
     public void ReadSharedMemory()
     {
+        /*
         mut.WaitOne();
 
         accessor.Read<MeshInfo>(0, out data);
@@ -66,6 +67,7 @@ public class SharedMemoryTest : MonoBehaviour
         Debug.Log("numVertices: " + data.numVertices);
 
         mut.ReleaseMutex();
+        */
         
         vmut.WaitOne();
 
@@ -88,6 +90,18 @@ public class SharedMemoryTest : MonoBehaviour
         Debug.Log("Vector (" + vdata.x + ", " + vdata.y + ", " + vdata.z + ")" );
         
         vmut.ReleaseMutex();
+        
+        vvmut.WaitOne();
+
+        vvaccessor.Read<Vector3fArray>(0, out vvdata);
+        Debug.Log("Vector (" + vvdata.vectors[0].x + ", " + vvdata.vectors[0].y + ", " + vvdata.vectors[1].z + ")" );
+        
+        /*
+        vvaccessor.Read<Vector3>(3 * sizeof(float), out vvdata);
+        Debug.Log("Vector (" + vvdata.x + ", " + vvdata.y + ", " + vvdata.z + ")" );
+        */
+        
+        vvmut.ReleaseMutex();
     }
     
     public void InitSharedMemory()
@@ -117,16 +131,35 @@ public class SharedMemoryTest : MonoBehaviour
         {
             Debug.Log("Error in v: " + e.Message);
         }
+        
+        try 
+        {
+            Debug.Log("Start vv");
+            
+            vvmemMapFile = MemoryMappedFile.OpenExisting("VERTICES_ARRAY");
+            
+            vvaccessor = vvmemMapFile.CreateViewAccessor();
+        }
+        catch (Exception e)
+        {
+            Debug.Log("Error in v: " + e.Message);
+        }
     }
 	
 	public void OnDestroy()
 	{
 		Debug.Log("End");
+        
         mut.Dispose();
-        vmut.Dispose();
         memMapFile.Dispose();
-        vmemMapFile.Dispose();
         accessor.Dispose();
+        
+        vmut.Dispose();
+        vmemMapFile.Dispose();
         vaccessor.Dispose();
+        
+        vvmut.Dispose();
+        vvmemMapFile.Dispose();
+        vvaccessor.Dispose();
 	}
 }
