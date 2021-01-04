@@ -37,6 +37,7 @@ public class SharedMemoryTest : MonoBehaviour
     private static Mutex vmut;
     MemoryMappedFile vmemMapFile;
     MemoryMappedViewAccessor vaccessor;
+    private Vector3 vdata;
     
     // Start is called before the first frame update
     void Start()
@@ -68,6 +69,7 @@ public class SharedMemoryTest : MonoBehaviour
         
         vmut.WaitOne();
 
+        /*
         BinaryReader reader = new BinaryReader(vmemMapFile.CreateViewStream());
         
         for (int i = 0; i < 1000; i++)
@@ -79,12 +81,12 @@ public class SharedMemoryTest : MonoBehaviour
                 Debug.Log("HERE NOT NULL: i =" + i + " value = " + value);
             }
         }
-        
-        /*
-        vaccessor.Read<Vector3fArray>(0, out vdata);
-        Debug.Log("int: " + vdata.x);
-        Debug.Log("Vector (" + vdata.vectors[0].x + ", " + vdata.vectors[0].y + ", " + vdata.vectors[0].z + ")" );
         */
+        
+        
+        vaccessor.Read<Vector3>(0, out vdata);
+        Debug.Log("Vector (" + vdata.x + ", " + vdata.y + ", " + vdata.z + ")" );
+        
         vmut.ReleaseMutex();
     }
     
@@ -109,7 +111,7 @@ public class SharedMemoryTest : MonoBehaviour
             
             vmemMapFile = MemoryMappedFile.OpenExisting("VERTICES");
             
-            // vaccessor = vmemMapFile.CreateViewAccessor();
+            vaccessor = vmemMapFile.CreateViewAccessor();
         }
         catch (Exception e)
         {
@@ -121,6 +123,7 @@ public class SharedMemoryTest : MonoBehaviour
 	{
 		Debug.Log("End");
         mut.Dispose();
+        vmut.Dispose();
         memMapFile.Dispose();
         vmemMapFile.Dispose();
         accessor.Dispose();
