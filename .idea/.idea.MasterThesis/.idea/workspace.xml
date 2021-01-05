@@ -20,6 +20,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e9fd9d70-1f76-4806-85e7-8c544d89cb49" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.MasterThesis/.idea/contentModel.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.MasterThesis/.idea/contentModel.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.MasterThesis/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.MasterThesis/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/SharedMemoryTest.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/SharedMemoryTest.cs" afterDir="false" />
@@ -33,13 +34,17 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/Assets/SharedMemoryAccess.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/InfiniTAMConnector.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/SharedMemoryTest.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/Assets/MeshTest.cs" />
+        <option value="$PROJECT_DIR$/Assets/SharedMemoryAccess.cs" />
         <option value="$PROJECT_DIR$/Assets/SharedMemoryTest.cs" />
+        <option value="$PROJECT_DIR$/Assets/InfiniTAMConnector.cs" />
       </list>
     </option>
   </component>
@@ -100,6 +105,9 @@
       <workItem from="1609767268834" duration="2857000" />
       <workItem from="1609787436264" duration="2787000" />
       <workItem from="1609837782642" duration="325000" />
+      <workItem from="1609839144718" duration="2940000" />
+      <workItem from="1609849724706" duration="3686000" />
+      <workItem from="1609856194103" duration="5333000" />
     </task>
     <servers />
   </component>
@@ -124,9 +132,9 @@
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="687" y="243" key="search.everywhere.popup" timestamp="1606148059542">
+    <state x="687" y="243" width="672" height="678" key="search.everywhere.popup" timestamp="1609853350759">
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
-    <state x="687" y="243" key="search.everywhere.popup/0.0.2048.1112@0.0.2048.1112" timestamp="1606148059542" />
+    <state x="687" y="243" width="672" height="678" key="search.everywhere.popup/0.0.2048.1112@0.0.2048.1112" timestamp="1609853350759" />
   </component>
 </project>

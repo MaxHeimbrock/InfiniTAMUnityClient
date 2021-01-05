@@ -6,7 +6,9 @@
     <e p="C:\Users\Max\Documents\GitHub\MasterThesis" t="IncludeRecursive">
       <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
       <e p="Assets" t="Include">
+        <e p="InfiniTAMConnector.cs" t="Include" />
         <e p="MeshTest.cs" t="Include" />
+        <e p="SharedMemoryAccess.cs" t="Include" />
         <e p="SharedMemoryTest.cs" t="Include" />
       </e>
       <e p="MasterThesis.sln" t="IncludeFlat" />
