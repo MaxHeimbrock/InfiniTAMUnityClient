@@ -22,56 +22,65 @@ public struct Vector3fArray
 
 public class SharedMemoryTest : MonoBehaviour
 {
-    private static Mutex mut;
-    MemoryMappedFile memMapFile;
-    MemoryMappedViewAccessor accessor;
-    MeshInfo data;
+    public int number = 0;
+    private Mesh mesh;
     
-    private static Mutex vmut;
-    MemoryMappedFile vmemMapFile;
-    MemoryMappedViewAccessor vaccessor;
-    private Vector3 vdata;
+    /*
+     * [0] -> MeshInfo
+     * [1] -> Vertices
+     */
+
+    private SharedMemoryAccess[] sharedMemories;
     
-    private static Mutex vvmut;
-    MemoryMappedFile vvmemMapFile;
-    MemoryMappedViewAccessor vvaccessor;
-    private Vector3fArray vvdata;
+    private const string meshInfoMutexName = "MESHINFO_MUTEX_";
+    private const string meshInfoFileName = "MESHINFO_SHAREDMEMORY_";
     
+    MeshInfo meshInfo;
+    
+    private const string verticesMutexName = "VERTICES_MUTEX_";
+    private const string verticesFileName = "VERTICES_SHAREDMEMORY_";
+    
+    Vector3fArray vertices;
+
     // Start is called before the first frame update
     void Start()
     {
-        mut = new Mutex(false, "NameOfMutexObject");
-        vmut = new Mutex(false, "VERTICES_MUTEX");
-        vvmut = new Mutex(false, "VERTICES_ARRAY_MUTEX");
+        mesh = GetComponent<MeshFilter>().mesh;
+        
+        // mut = new Mutex(false, "NameOfMutexObject");
+        // vmut = new Mutex(false, "VERTICES_MUTEX");
+        // vvmut = new Mutex(false, "VERTICES_ARRAY_MUTEX");
+        // vvmut = new Mutex(false, "TEST");
+        
+        sharedMemories = new SharedMemoryAccess[2];
         InitSharedMemory();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.anyKeyDown)
-        {
-            if (accessor != null)
-            {
-                ReadSharedMemory();
-                UpdateMesh();
-            }
-        }
+        ReadSharedMemory();
     }
 
     public void UpdateMesh()
     {
-        Mesh mesh = GetComponent<MeshFilter>().mesh;
-
-        Vector3[] vertices = mesh.vertices;
+        mesh = GetComponent<MeshFilter>().mesh;
 
         //Re-assign the modified mesh
-        mesh.vertices = vvdata.vectors;
+        mesh.vertices = vertices.vectors;
         mesh.RecalculateBounds();
     }
     
     public void ReadSharedMemory()
     {
+        sharedMemories[0].Lock();
+        sharedMemories[0].accessor.Read<MeshInfo>(0, out meshInfo);
+        sharedMemories[0].Unlock();
+        
+        Debug.Log("MeshID: " + meshInfo.meshId);
+        Debug.Log("numFaces: " + meshInfo.numFaceIndices);
+        Debug.Log("numVertices: " + meshInfo.numVertices);
+        
         /*
         mut.WaitOne();
 
@@ -81,7 +90,7 @@ public class SharedMemoryTest : MonoBehaviour
         Debug.Log("numVertices: " + data.numVertices);
 
         mut.ReleaseMutex();
-        */
+        
         
         vmut.WaitOne();
 
@@ -97,7 +106,7 @@ public class SharedMemoryTest : MonoBehaviour
                 Debug.Log("HERE NOT NULL: i =" + i + " value = " + value);
             }
         }
-        */
+        
         
         
         vaccessor.Read<Vector3>(0, out vdata);
@@ -115,67 +124,70 @@ public class SharedMemoryTest : MonoBehaviour
         /*
         vvaccessor.Read<Vector3>(3 * sizeof(float), out vvdata);
         Debug.Log("Vector (" + vvdata.x + ", " + vvdata.y + ", " + vvdata.z + ")" );
-        */
+        
         
         vvmut.ReleaseMutex();
+        
+        */
     }
     
     public void InitSharedMemory()
     {
-        try 
-        {
-            Debug.Log("Start");
-            
-            memMapFile = MemoryMappedFile.OpenExisting("INFO_MAPPING");
-            
-            accessor = memMapFile.CreateViewAccessor();
-        }
-        catch (Exception e)
-        {
-            Debug.Log("Error: " + e.Message);
-        }
-        
-        try 
-        {
-            Debug.Log("Start v");
-            
-            vmemMapFile = MemoryMappedFile.OpenExisting("VERTICES");
-            
-            vaccessor = vmemMapFile.CreateViewAccessor();
-        }
-        catch (Exception e)
-        {
-            Debug.Log("Error in v: " + e.Message);
-        }
-        
-        try 
-        {
-            Debug.Log("Start vv");
-            
-            vvmemMapFile = MemoryMappedFile.OpenExisting("VERTICES_ARRAY");
-            
-            vvaccessor = vvmemMapFile.CreateViewAccessor();
-        }
-        catch (Exception e)
-        {
-            Debug.Log("Error in v: " + e.Message);
-        }
+        sharedMemories[0] = new SharedMemoryAccess(meshInfoMutexName + number, meshInfoFileName + number);
+        // sharedMemories[1] = new SharedMemoryAccess(verticesMutexName + number, verticesFileName + number);
     }
 	
 	public void OnDestroy()
 	{
 		Debug.Log("End");
-        
-        mut.Dispose();
-        memMapFile.Dispose();
-        accessor.Dispose();
-        
-        vmut.Dispose();
-        vmemMapFile.Dispose();
-        vaccessor.Dispose();
-        
-        vvmut.Dispose();
-        vvmemMapFile.Dispose();
-        vvaccessor.Dispose();
-	}
+
+        for (int i = 0; i < sharedMemories.Length; i++)
+        {
+            sharedMemories[i].Destroy();
+        }
+    }
+
+    private class SharedMemoryAccess
+    {
+        private string mutexName; 
+        private string mmfName; 
+    
+        private static Mutex mutex;
+        private MemoryMappedFile mmf;
+        public MemoryMappedViewAccessor accessor;
+
+        public SharedMemoryAccess(string mutexName, string mmfName)
+        {
+            mutex = new Mutex(false, mutexName);
+            
+            try 
+            {
+                mmf = MemoryMappedFile.OpenExisting(mmfName);
+                accessor = mmf.CreateViewAccessor();
+            }
+            catch (Exception e)
+            {
+                Debug.Log("Could not open existing shared memory " + mmfName );
+            }
+        }
+
+        public void Destroy()
+        {
+            mutex.Dispose();
+            mmf.Dispose();
+            accessor.Dispose();
+        }
+
+        public bool Lock()
+        {
+            return mutex.WaitOne();
+        }
+
+        public void Unlock()
+        {
+            mutex.ReleaseMutex();
+        }
+    }
 }
+
+
