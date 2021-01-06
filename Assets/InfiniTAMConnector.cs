@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
 using UnityEngine;
@@ -10,25 +9,11 @@ public struct MeshInfo
     public int meshId, numVertices, numFaceIndices;
 }
 
-[StructLayout(LayoutKind.Sequential)]
-public struct Vector3fArray
-{
-    [MarshalAs(UnmanagedType.ByValArray)]
-    public Vector3[] vectors;
-}
-
-[StructLayout(LayoutKind.Sequential)]
-public struct IntArray
-{
-    [MarshalAs(UnmanagedType.ByValArray, SizeConst = 300000)]
-    public int[] faceIndices;
-}
-
 public class InfiniTAMConnector : MonoBehaviour
 {
     public GameObject prefab;
     
-    private static Dictionary<int, Mesh> activeMeshes;
+    private static Dictionary<int, GameObject> activeMeshes;
     
     private int currentBufferNumber = 0;
 
@@ -51,11 +36,13 @@ public class InfiniTAMConnector : MonoBehaviour
     {
         if (activeMeshes == null)
         {
-            activeMeshes = new Dictionary<int, Mesh>();
+            activeMeshes = new Dictionary<int, GameObject>();
         }
         
         sharedMeshBuffers[0] = new SharedMeshData(0);
         sharedMeshBuffers[1] = new SharedMeshData(1);
+        
+        Debug.Log("Init shared memory successful");
     }
 
     // Update is called once per frame
@@ -64,14 +51,14 @@ public class InfiniTAMConnector : MonoBehaviour
         ReadSharedMemory();
     }
 
-    public void UpdateMesh(Mesh mesh, Vector3[] newVertices, int[] faceIndices)
+    public void UpdateMesh(GameObject mesh, Vector3[] newVertices, int[] faceIndices)
     {
-        //Re-assign the modified mesh
-        Debug.Log(mesh.triangles.Length);
-        Debug.Log(newVertices.Length);
-        mesh.vertices = newVertices;
-        // mesh.triangles = faceIndices;
-        mesh.RecalculateBounds();
+        Mesh newMesh = new Mesh();
+        newMesh.vertices = newVertices;
+        newMesh.triangles = faceIndices;
+        newMesh.RecalculateBounds();
+
+        mesh.GetComponent<MeshFilter>().mesh = newMesh;
     }
     
     public void ReadSharedMemory()
@@ -85,46 +72,37 @@ public class InfiniTAMConnector : MonoBehaviour
 
         if (meshInfo.meshId < 0)
         {
-            // Debug.Log("No new updates");
             return;
         }
             
         Debug.Log("New mesh update on mesh " + meshInfo.meshId);
 
-        Vector3fArray verticesStruct;
-        Vector3[] testArray = new Vector3[meshInfo.numVertices];
+        // Vector3fArray verticesStruct;
+        Vector3[] vertices = new Vector3[meshInfo.numVertices];
         
         currentBuffer.sharedMemories[1].Lock();
-        // currentBuffer.sharedMemories[1].accessor.Read<Vector3fArray>(0, out verticesStruct);
-        currentBuffer.sharedMemories[1].accessor.ReadArray<Vector3>(0, testArray, 0, meshInfo.numVertices);
+        currentBuffer.sharedMemories[1].accessor.ReadArray<Vector3>(0, vertices, 0, meshInfo.numVertices);
         currentBuffer.sharedMemories[1].Unlock();
-        
-        Debug.Log(testArray[0]);
-        Debug.Log(testArray[1]);
-        
-        IntArray faceIndices;
+
+        // IntArray faceIndices;
+        int[] faceIndices = new int[meshInfo.numFaceIndices];
         
         currentBuffer.sharedMemories[3].Lock();
-        currentBuffer.sharedMemories[3].accessor.Read<IntArray>(0, out faceIndices);
+        currentBuffer.sharedMemories[3].accessor.ReadArray<int>(0, faceIndices, 0, meshInfo.numFaceIndices);
         currentBuffer.sharedMemories[3].Unlock();
         
-        Debug.Log("(" + faceIndices.faceIndices[0] + "," + faceIndices.faceIndices[1] + "," + faceIndices.faceIndices[2] + ")");
-
         // Update active mesh
         if (activeMeshes.ContainsKey(meshInfo.meshId))
         {
-            // UpdateMesh(activeMeshes[meshInfo.meshId], verticesStruct.vectors, faceIndices.faceIndices);
+            UpdateMesh(activeMeshes[meshInfo.meshId], vertices, faceIndices);
         }
         // Create new mesh
         else
         {
-            // GameObject newGameObject = new GameObject("Mesh" + meshInfo.meshId);
-            // newGameObject.AddComponent<MeshFilter>();
-            // newGameObject.AddComponent<MeshRenderer>();
             GameObject newGameObject = Instantiate(prefab);
-            Mesh mesh = newGameObject.GetComponent<MeshFilter>().mesh;
-            // UpdateMesh(mesh, verticesStruct.vectors, faceIndices.faceIndices);
-            activeMeshes.Add(meshInfo.meshId, mesh); 
+            newGameObject.name = "Mesh" + meshInfo.meshId;
+            UpdateMesh(newGameObject, vertices, faceIndices);
+            activeMeshes.Add(meshInfo.meshId, newGameObject); 
         }
         
         // mark update as read
@@ -139,8 +117,6 @@ public class InfiniTAMConnector : MonoBehaviour
 
     public void OnDestroy()
     {
-        Debug.Log("End");
-
         for (int i = 0; i < 2; i++)
         {
             for (int j = 0; j < sharedMeshBuffers[i].sharedMemories.Length; j++)

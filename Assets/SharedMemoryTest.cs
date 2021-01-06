@@ -22,7 +22,7 @@ public class SharedMemoryTest : MonoBehaviour
     private const string verticesFileName = "VERTICES_SHAREDMEMORY_";
 
     private Vector3 vertex;
-    Vector3fArray vertices;
+    //Vector3fArray vertices;
 
     // Start is called before the first frame update
     void Start()
@@ -43,7 +43,7 @@ public class SharedMemoryTest : MonoBehaviour
     public void UpdateMesh()
     {
         //Re-assign the modified mesh
-        mesh.vertices = vertices.vectors;
+        //mesh.vertices = vertices.vectors;
         mesh.RecalculateBounds();
     }
     
@@ -54,7 +54,7 @@ public class SharedMemoryTest : MonoBehaviour
         sharedMemories[0].Unlock();
         
         sharedMemories[1].Lock();
-        sharedMemories[1].accessor.Read<Vector3fArray>(0, out vertices);
+        //sharedMemories[1].accessor.Read<Vector3fArray>(0, out vertices);
         sharedMemories[1].Unlock();
     }
     

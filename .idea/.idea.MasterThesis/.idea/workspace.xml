@@ -20,9 +20,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e9fd9d70-1f76-4806-85e7-8c544d89cb49" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.MasterThesis/.idea/contentModel.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.MasterThesis/.idea/contentModel.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.MasterThesis/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.MasterThesis/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/InfiniTAMConnector.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/InfiniTAMConnector.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/SharedMemoryTest.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/SharedMemoryTest.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -108,6 +107,7 @@
       <workItem from="1609839144718" duration="2940000" />
       <workItem from="1609849724706" duration="3686000" />
       <workItem from="1609856194103" duration="5333000" />
+      <workItem from="1609923207437" duration="1726000" />
     </task>
     <servers />
   </component>
