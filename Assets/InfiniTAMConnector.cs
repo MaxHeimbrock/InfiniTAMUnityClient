@@ -30,6 +30,9 @@ public class InfiniTAMConnector : MonoBehaviour
     
     private const string facesMutexName = "FACES_MUTEX_";
     private const string facesFileName = "FACES_SHAREDMEMORY_";
+    
+    private const string colorsMutexName = "COLORS_MUTEX_";
+    private const string colorsFileName = "COLORS_SHAREDMEMORY_";
 
     // Start is called before the first frame update
     void Start()
@@ -51,12 +54,27 @@ public class InfiniTAMConnector : MonoBehaviour
         ReadSharedMemory();
     }
 
-    public void UpdateMesh(GameObject mesh, Vector3[] newVertices, int[] faceIndices)
+    Color[] CreateColorsFromVector4Array(Vector4[] colorsAsVectorArray)
     {
+        Color[] result = new Color[colorsAsVectorArray.Length];
+
+        for (int i = 0; i < colorsAsVectorArray.Length; i++)
+        {
+            result[i] = new Color(colorsAsVectorArray[i].x, colorsAsVectorArray[i].y, colorsAsVectorArray[i].z, colorsAsVectorArray[i].w);
+        }
+        
+        return result;
+    }
+
+    public void UpdateMesh(GameObject mesh, Vector3[] newVertices, Vector3[] normals, int[] faceIndices, Vector4[] colorsAsVectors)
+    {
+        Color[] colors = CreateColorsFromVector4Array(colorsAsVectors);
+        
         Mesh newMesh = new Mesh();
         newMesh.vertices = newVertices;
+        newMesh.normals = normals;
         newMesh.triangles = faceIndices;
-        newMesh.RecalculateBounds();
+        newMesh.colors = colors;
 
         mesh.GetComponent<MeshFilter>().mesh = newMesh;
     }
@@ -75,34 +93,42 @@ public class InfiniTAMConnector : MonoBehaviour
             return;
         }
             
-        Debug.Log("New mesh update on mesh " + meshInfo.meshId);
+        // Debug.Log("New mesh update on mesh " + meshInfo.meshId);
 
-        // Vector3fArray verticesStruct;
         Vector3[] vertices = new Vector3[meshInfo.numVertices];
-        
         currentBuffer.sharedMemories[1].Lock();
         currentBuffer.sharedMemories[1].accessor.ReadArray<Vector3>(0, vertices, 0, meshInfo.numVertices);
         currentBuffer.sharedMemories[1].Unlock();
 
-        // IntArray faceIndices;
-        int[] faceIndices = new int[meshInfo.numFaceIndices];
+        // TODO NORMALS
         
+        Vector3[] normals = new Vector3[meshInfo.numVertices];
+        currentBuffer.sharedMemories[1].Lock();
+        currentBuffer.sharedMemories[1].accessor.ReadArray<Vector3>(0, normals, 0, meshInfo.numVertices);
+        currentBuffer.sharedMemories[1].Unlock();
+
+        int[] faceIndices = new int[meshInfo.numFaceIndices];
         currentBuffer.sharedMemories[3].Lock();
         currentBuffer.sharedMemories[3].accessor.ReadArray<int>(0, faceIndices, 0, meshInfo.numFaceIndices);
         currentBuffer.sharedMemories[3].Unlock();
         
+        Vector4[] colors = new Vector4[meshInfo.numVertices];
+        currentBuffer.sharedMemories[4].Lock();
+        currentBuffer.sharedMemories[4].accessor.ReadArray<Vector4>(0, colors, 0, meshInfo.numVertices);
+        currentBuffer.sharedMemories[4].Unlock();
+        
         // Update active mesh
         if (activeMeshes.ContainsKey(meshInfo.meshId))
         {
-            UpdateMesh(activeMeshes[meshInfo.meshId], vertices, faceIndices);
+            UpdateMesh(activeMeshes[meshInfo.meshId], vertices, normals, faceIndices, colors);
         }
         // Create new mesh
         else
         {
             GameObject newGameObject = Instantiate(prefab);
             newGameObject.name = "Mesh" + meshInfo.meshId;
-            UpdateMesh(newGameObject, vertices, faceIndices);
-            activeMeshes.Add(meshInfo.meshId, newGameObject); 
+            UpdateMesh(newGameObject, vertices, normals, faceIndices, colors);
+            activeMeshes.Add(meshInfo.meshId, newGameObject);
         }
         
         // mark update as read
@@ -132,12 +158,13 @@ public class InfiniTAMConnector : MonoBehaviour
 
         public SharedMeshData(int bufferNumber)
         {
-            sharedMemories = new SharedMemoryAccess[4];
+            sharedMemories = new SharedMemoryAccess[5];
             
             sharedMemories[0] = new SharedMemoryAccess(meshInfoMutexName + bufferNumber, meshInfoFileName + bufferNumber);
             sharedMemories[1] = new SharedMemoryAccess(verticesMutexName + bufferNumber, verticesFileName + bufferNumber);
             sharedMemories[2] = new SharedMemoryAccess(normalsMutexName + bufferNumber, normalsFileName + bufferNumber);
             sharedMemories[3] = new SharedMemoryAccess(facesMutexName + bufferNumber, facesFileName + bufferNumber);
+            sharedMemories[4] = new SharedMemoryAccess(colorsMutexName + bufferNumber, colorsFileName + bufferNumber);
         }
     }
 }
