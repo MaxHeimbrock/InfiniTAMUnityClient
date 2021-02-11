@@ -9,9 +9,19 @@ public struct MeshInfo
     public int meshId, numVertices, numFaceIndices;
 }
 
+
+public struct Matrix4
+{
+    public float	m00, m01, m02, m03,
+        m10, m11, m12, m13,
+        m20, m21, m22, m23,
+        m30, m31, m32, m33;
+};
+
 public class InfiniTAMConnector : MonoBehaviour
 {
     public GameObject prefab;
+    public GameObject parent;
     
     private static Dictionary<int, GameObject> activeMeshes;
     
@@ -33,6 +43,11 @@ public class InfiniTAMConnector : MonoBehaviour
     
     private const string colorsMutexName = "COLORS_MUTEX_";
     private const string colorsFileName = "COLORS_SHAREDMEMORY_";
+    
+    private const string cameraPosMutexName = "CAMERA_POS_MUTEX";
+    private const string cameraPosFileName = "CAMERA_POS_SHAREDMEMORY";
+
+    private SharedMemoryAccess cameraPosSharedMemory;
 
     // Start is called before the first frame update
     void Start()
@@ -44,6 +59,8 @@ public class InfiniTAMConnector : MonoBehaviour
         
         sharedMeshBuffers[0] = new SharedMeshData(0);
         sharedMeshBuffers[1] = new SharedMeshData(1);
+        
+        cameraPosSharedMemory = new SharedMemoryAccess(cameraPosMutexName, cameraPosFileName);
         
         Debug.Log("Init shared memory successful");
     }
@@ -81,6 +98,50 @@ public class InfiniTAMConnector : MonoBehaviour
     
     public void ReadSharedMemory()
     {
+        Matrix4 cameraPosTemp;
+        
+        cameraPosSharedMemory.Lock();
+        cameraPosSharedMemory.accessor.Read<Matrix4>(0, out cameraPosTemp);
+        cameraPosSharedMemory.Unlock();
+
+        Matrix4x4 cameraPos;
+        
+        cameraPos.m00 = cameraPosTemp.m00;
+        cameraPos.m01 = cameraPosTemp.m01;
+        cameraPos.m02 = cameraPosTemp.m02;
+        cameraPos.m03 = cameraPosTemp.m03;
+        cameraPos.m10 = cameraPosTemp.m10;
+        cameraPos.m11 = cameraPosTemp.m11;
+        cameraPos.m12 = cameraPosTemp.m12;
+        cameraPos.m13 = cameraPosTemp.m13;
+        cameraPos.m20 = cameraPosTemp.m20;
+        cameraPos.m21 = cameraPosTemp.m21;
+        cameraPos.m22 = cameraPosTemp.m22;
+        cameraPos.m23 = cameraPosTemp.m23;
+        cameraPos.m30 = cameraPosTemp.m30;
+        cameraPos.m31 = cameraPosTemp.m31;
+        cameraPos.m32 = cameraPosTemp.m32;
+        cameraPos.m33 = cameraPosTemp.m33;
+
+        cameraPos = cameraPos.transpose;
+
+        /*
+        Matrix4x4 coordinateSystemConversionMatrix = new Matrix4x4(
+            new Vector4(0,0,-1,0), 
+            new Vector4(0,1,0,0), 
+            new Vector4(1,0,0,0), 
+            new Vector4(0,0,0,1));
+        
+        cameraPos = coordinateSystemConversionMatrix * cameraPos;
+        */
+        
+        // TRANSLATION: invert x and z
+        Vector3 posTemp = new Vector3(-cameraPos.m03, cameraPos.m13, -cameraPos.m23);
+        Camera.main.transform.position = posTemp;
+        // ROTATION: invert y axis
+        Quaternion rotTemp = new Quaternion(cameraPos.rotation.x, -cameraPos.rotation.y, cameraPos.rotation.z, cameraPos.rotation.w);
+        Camera.main.transform.rotation = rotTemp;
+        
         MeshInfo meshInfo;
         SharedMeshData currentBuffer = sharedMeshBuffers[currentBufferNumber];
         
@@ -125,10 +186,12 @@ public class InfiniTAMConnector : MonoBehaviour
         // Create new mesh
         else
         {
-            GameObject newGameObject = Instantiate(prefab);
+            GameObject newGameObject = Instantiate(prefab, parent.transform);
             newGameObject.name = "Mesh" + meshInfo.meshId;
             UpdateMesh(newGameObject, vertices, normals, faceIndices, colors);
             activeMeshes.Add(meshInfo.meshId, newGameObject);
+            // Meshes come in upside down
+            newGameObject.transform.localScale = new Vector3(1,-1,1);
         }
         
         // mark update as read

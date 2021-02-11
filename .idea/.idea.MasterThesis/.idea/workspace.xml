@@ -20,8 +20,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e9fd9d70-1f76-4806-85e7-8c544d89cb49" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.MasterThesis/.idea/indexLayout.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.MasterThesis/.idea/indexLayout.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.MasterThesis/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.MasterThesis/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Cylinder.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Cylinder.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Cylinder.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Cylinder.prefab.meta" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/InfiniTAMConnector.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/InfiniTAMConnector.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" afterDir="false" />
     </list>
@@ -34,8 +36,8 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/Assets/SharedMemoryAccess.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/InfiniTAMConnector.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/SharedMemoryAccess.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/SharedMemoryTest.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="IdeDocumentHistory">
@@ -109,6 +111,13 @@
       <workItem from="1609849724706" duration="3686000" />
       <workItem from="1609856194103" duration="5333000" />
       <workItem from="1609923207437" duration="5593000" />
+      <workItem from="1612882673999" duration="2785000" />
+      <workItem from="1612897993980" duration="1651000" />
+      <workItem from="1612947245406" duration="1520000" />
+      <workItem from="1613038672157" duration="2268000" />
+      <workItem from="1613048164640" duration="1254000" />
+      <workItem from="1613049904346" duration="380000" />
+      <workItem from="1613051176471" duration="313000" />
     </task>
     <servers />
   </component>
