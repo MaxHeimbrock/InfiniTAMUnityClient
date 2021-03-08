@@ -22,6 +22,8 @@ public class InfiniTAMConnector : MonoBehaviour
 {
     public GameObject prefab;
     public GameObject parent;
+
+    public static bool sendTransformToCam = true;
     
     private static Dictionary<int, GameObject> activeMeshes;
     
@@ -106,6 +108,7 @@ public class InfiniTAMConnector : MonoBehaviour
 
         Matrix4x4 cameraPos;
         
+        #region MatrixCopy
         cameraPos.m00 = cameraPosTemp.m00;
         cameraPos.m01 = cameraPosTemp.m01;
         cameraPos.m02 = cameraPosTemp.m02;
@@ -122,25 +125,21 @@ public class InfiniTAMConnector : MonoBehaviour
         cameraPos.m31 = cameraPosTemp.m31;
         cameraPos.m32 = cameraPosTemp.m32;
         cameraPos.m33 = cameraPosTemp.m33;
-
+        #endregion
+        
         cameraPos = cameraPos.transpose;
 
-        /*
-        Matrix4x4 coordinateSystemConversionMatrix = new Matrix4x4(
-            new Vector4(0,0,-1,0), 
-            new Vector4(0,1,0,0), 
-            new Vector4(1,0,0,0), 
-            new Vector4(0,0,0,1));
-        
-        cameraPos = coordinateSystemConversionMatrix * cameraPos;
-        */
-        
         // TRANSLATION: invert x and z
         Vector3 posTemp = new Vector3(-cameraPos.m03, cameraPos.m13, -cameraPos.m23);
-        Camera.main.transform.position = posTemp;
         // ROTATION: invert y axis
         Quaternion rotTemp = new Quaternion(cameraPos.rotation.x, -cameraPos.rotation.y, cameraPos.rotation.z, cameraPos.rotation.w);
-        Camera.main.transform.rotation = rotTemp;
+        
+        if (sendTransformToCam)
+        {
+            Camera.main.transform.rotation = rotTemp;
+            Camera.main.transform.position = posTemp;
+        }
+        
         
         MeshInfo meshInfo;
         SharedMeshData currentBuffer = sharedMeshBuffers[currentBufferNumber];

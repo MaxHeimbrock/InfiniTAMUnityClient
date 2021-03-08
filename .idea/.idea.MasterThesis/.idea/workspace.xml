@@ -20,10 +20,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e9fd9d70-1f76-4806-85e7-8c544d89cb49" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.MasterThesis/.idea/indexLayout.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.MasterThesis/.idea/indexLayout.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.MasterThesis/.idea/contentModel.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.MasterThesis/.idea/contentModel.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.MasterThesis/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.MasterThesis/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Cylinder.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Cylinder.prefab.meta" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/InfiniTAMConnector.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/InfiniTAMConnector.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" afterDir="false" />
     </list>
@@ -36,6 +34,7 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/Assets/UIManager.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/InfiniTAMConnector.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/SharedMemoryAccess.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/SharedMemoryTest.cs" root0="FORCE_HIGHLIGHTING" />
@@ -47,6 +46,8 @@
         <option value="$PROJECT_DIR$/Assets/SharedMemoryAccess.cs" />
         <option value="$PROJECT_DIR$/Assets/SharedMemoryTest.cs" />
         <option value="$PROJECT_DIR$/Assets/InfiniTAMConnector.cs" />
+        <option value="$PROJECT_DIR$/Assets/UIManager.cs" />
+        <option value="$PROJECT_DIR$/Assets/FlyCam.cs" />
       </list>
     </option>
   </component>
@@ -118,6 +119,7 @@
       <workItem from="1613048164640" duration="1254000" />
       <workItem from="1613049904346" duration="380000" />
       <workItem from="1613051176471" duration="313000" />
+      <workItem from="1615214821429" duration="847000" />
     </task>
     <servers />
   </component>
