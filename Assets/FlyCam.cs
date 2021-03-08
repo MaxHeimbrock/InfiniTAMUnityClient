@@ -14,13 +14,13 @@ public class FlyCam : MonoBehaviour {
 
     public static bool sendTransformToCamera = false;
      
-    public float mainSpeed = 100.0f; //regular speed
+    public float mainSpeed = 5.0f; //regular speed
     float shiftAdd = 250.0f; //multiplied by how long shift is held.  Basically running
     float maxShift = 1000.0f; //Maximum speed when holdin gshift
-    public float mouseSens = 0.25f; //How sensitive it with mouse
+    public float mouseSens = 0.15f; //How sensitive it with mouse
     private Vector3 lastMouse = new Vector3(255, 255, 255); //kind of in the middle of the screen, rather than at the top (play)
     private float totalRun= 1.0f;
-     
+    public float dragSpeed = 6f;
     void Update () {
         if (sendTransformToCamera == false)
         {
@@ -35,6 +35,13 @@ public class FlyCam : MonoBehaviour {
             transform.eulerAngles = lastMouse;
             
             //Mouse  camera angle done.   
+        }
+        
+        
+        //drag camera around with Middle Mouse
+        if (Input.GetMouseButton(0) || Input.GetMouseButton(2))
+        {
+            transform.Translate(-Input.GetAxisRaw("Mouse X") * Time.deltaTime * dragSpeed,   -Input.GetAxisRaw("Mouse Y") * Time.deltaTime * dragSpeed, 0);
         }
         
         lastMouse =  Input.mousePosition;
