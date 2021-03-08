@@ -26,14 +26,19 @@ public class FlyCam : MonoBehaviour {
         {
             return;
         }
+
+        if (Input.GetMouseButton(1))
+        {
+            lastMouse = Input.mousePosition - lastMouse;
+            lastMouse = new Vector3(-lastMouse.y * mouseSens, lastMouse.x * mouseSens, 0 );
+            lastMouse = new Vector3(transform.eulerAngles.x + lastMouse.x , transform.eulerAngles.y + lastMouse.y, 0);
+            transform.eulerAngles = lastMouse;
+            
+            //Mouse  camera angle done.   
+        }
         
-        lastMouse = Input.mousePosition - lastMouse ;
-        lastMouse = new Vector3(-lastMouse.y * mouseSens, lastMouse.x * mouseSens, 0 );
-        lastMouse = new Vector3(transform.eulerAngles.x + lastMouse.x , transform.eulerAngles.y + lastMouse.y, 0);
-        transform.eulerAngles = lastMouse;
         lastMouse =  Input.mousePosition;
-        //Mouse  camera angle done.  
-       
+
         //Keyboard commands
         float f = 0.0f;
         Vector3 p = GetBaseInput();
@@ -50,21 +55,15 @@ public class FlyCam : MonoBehaviour {
         }
        
         p = p * Time.deltaTime;
-       Vector3 newPosition = transform.position;
-        if (Input.GetKey(KeyCode.Space)){ //If player wants to move on X and Z axis only
-            transform.Translate(p);
-            newPosition.x = transform.position.x;
-            newPosition.z = transform.position.z;
-            transform.position = newPosition;
-        }
-        else{
-            transform.Translate(p);
-        }
-       
+        
+        transform.Translate(p);
     }
      
     private Vector3 GetBaseInput() { //returns the basic values, if it's 0 than it's not active.
         Vector3 p_Velocity = new Vector3();
+
+        p_Velocity += new Vector3(0, 0 , Input.mouseScrollDelta.y);
+        
         if (Input.GetKey (KeyCode.W)){
             p_Velocity += new Vector3(0, 0 , 1);
         }
