@@ -129,10 +129,10 @@ public class InfiniTAMConnector : MonoBehaviour
         
         cameraPos = cameraPos.transpose;
 
-        // TRANSLATION: invert x and z
-        Vector3 posTemp = new Vector3(-cameraPos.m03, cameraPos.m13, -cameraPos.m23);
-        // ROTATION: invert y axis
-        Quaternion rotTemp = new Quaternion(cameraPos.rotation.x, -cameraPos.rotation.y, cameraPos.rotation.z, cameraPos.rotation.w);
+        // TRANSLATION: invert y 
+        Vector3 posTemp = new Vector3(cameraPos.m03, -cameraPos.m13, cameraPos.m23);
+        // ROTATION: invert x and z axis
+        Quaternion rotTemp = new Quaternion(-cameraPos.rotation.x, cameraPos.rotation.y, -cameraPos.rotation.z, cameraPos.rotation.w);
         
         if (sendTransformToCam)
         {
