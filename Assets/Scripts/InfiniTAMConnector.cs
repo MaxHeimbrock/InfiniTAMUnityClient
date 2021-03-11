@@ -53,6 +53,7 @@ public class InfiniTAMConnector : MonoBehaviour
     private SharedMemoryAccess cameraPosSharedMemory;
 
     private bool sharedMemoryInitialized = false;
+    private bool clientReady = false;
 
     // Start is called before the first frame update
     void Start()
@@ -71,13 +72,13 @@ public class InfiniTAMConnector : MonoBehaviour
         }
         catch (Exception e)
         {
-            UIManager.WriteToLogger("Could not open existing shared memory");
-            Debug.Log("Could not open existing shared memory");
+            UIManager.WriteToLogger("Client not found.");
+            Debug.Log("Client not found.");
             return;
         }
 
-        UIManager.WriteToLogger("Init shared memory successful");
-        Debug.Log("Init shared memory successful");
+        UIManager.WriteToLogger("Client found. Wait shared memory allocation.");
+        Debug.Log("Client found. Wait for shared memory allocation.");
     }
 
     // Update is called once per frame
@@ -167,6 +168,13 @@ public class InfiniTAMConnector : MonoBehaviour
         if (meshInfo.meshId < 0)
         {
             return;
+
+        }
+        else if (clientReady == false && meshInfo.meshId == 1)
+        {
+            UIManager.WriteToLogger("Setup complete.");
+            Debug.Log("Setup complete.");
+            clientReady = true;
         }
             
         // Debug.Log("New mesh update on mesh " + meshInfo.meshId);

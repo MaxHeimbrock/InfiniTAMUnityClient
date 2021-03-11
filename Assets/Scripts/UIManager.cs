@@ -24,7 +24,6 @@ public class UIManager : MonoBehaviour
     {
         if (newMessage)
         {
-            Debug.Log("Updated UI");
             loggerText.text = log;
             newMessage = false;
         }
