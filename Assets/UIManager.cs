@@ -1,12 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using TMPro;
 using UnityEngine;
 
 public class UIManager : MonoBehaviour
 {
-    public TextMeshProUGUI text;
+    public TextMeshProUGUI trackingStateText;
+    public TextMeshProUGUI loggerText;
     public bool useTracking = true;
+
+    private static string log = "";
+    private static bool newMessage = false;
     
     // Start is called before the first frame update
     void Start()
@@ -17,6 +22,13 @@ public class UIManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (newMessage)
+        {
+            Debug.Log("Updated UI");
+            loggerText.text = log;
+            newMessage = false;
+        }
+        
         if (Input.GetKeyDown(KeyCode.Space))
         {
             useTracking = !useTracking;
@@ -26,15 +38,23 @@ public class UIManager : MonoBehaviour
                 InfiniTAMConnector.sendTransformToCam = true;
                 FlyCam.sendTransformToCamera = false;
 
-                text.text = "Tracking";
+                trackingStateText.text = "Tracking";
             }
             else
             {
                 InfiniTAMConnector.sendTransformToCam = false;
                 FlyCam.sendTransformToCamera = true;
                 
-                text.text = "Free View";
+                trackingStateText.text = "Free View";
             }
         }
+    }
+
+    public static void WriteToLogger(string logMessage)
+    {
+        log = log + "\n\n[" + 
+              System.DateTime.Now.ToString("HH:mm:ss") + "]\n" +
+              logMessage;
+        newMessage = true;
     }
 }

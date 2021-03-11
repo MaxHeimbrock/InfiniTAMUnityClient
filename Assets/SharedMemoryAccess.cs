@@ -15,16 +15,10 @@ public class SharedMemoryAccess
     public SharedMemoryAccess(string mutexName, string mmfName)
     {
         mutex = new Mutex(false, mutexName);
-            
-        try 
-        {
+        
             mmf = MemoryMappedFile.OpenExisting(mmfName);
             accessor = mmf.CreateViewAccessor();
-        }
-        catch (Exception e)
-        {
-            Debug.Log("Could not open existing shared memory " + mmfName );
-        }
+        
     }
 
     public void Destroy()

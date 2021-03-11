@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
 using UnityEngine;
@@ -8,7 +9,6 @@ public struct MeshInfo
 {
     public int meshId, numVertices, numFaceIndices;
 }
-
 
 public struct Matrix4
 {
@@ -27,9 +27,10 @@ public class InfiniTAMConnector : MonoBehaviour
     
     private static Dictionary<int, GameObject> activeMeshes;
     
+    // we have two buffers in InfiniTAM Client
+    private const int NUMBUFFERS = 2;
     private int currentBufferNumber = 0;
-
-    private SharedMeshData[] sharedMeshBuffers = new SharedMeshData[2];
+    private SharedMeshData[] sharedMeshBuffers = new SharedMeshData[NUMBUFFERS];
     
     private const string meshInfoMutexName = "MESHINFO_MUTEX_";
     private const string meshInfoFileName = "MESHINFO_SHAREDMEMORY_";
@@ -51,6 +52,8 @@ public class InfiniTAMConnector : MonoBehaviour
 
     private SharedMemoryAccess cameraPosSharedMemory;
 
+    private bool sharedMemoryInitialized = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -59,18 +62,31 @@ public class InfiniTAMConnector : MonoBehaviour
             activeMeshes = new Dictionary<int, GameObject>();
         }
         
-        sharedMeshBuffers[0] = new SharedMeshData(0);
-        sharedMeshBuffers[1] = new SharedMeshData(1);
-        
-        cameraPosSharedMemory = new SharedMemoryAccess(cameraPosMutexName, cameraPosFileName);
-        
+        try
+        {
+            cameraPosSharedMemory = new SharedMemoryAccess(cameraPosMutexName, cameraPosFileName);
+            sharedMeshBuffers[0] = new SharedMeshData(0);
+            sharedMeshBuffers[1] = new SharedMeshData(1);
+            sharedMemoryInitialized = true;
+        }
+        catch (Exception e)
+        {
+            UIManager.WriteToLogger("Could not open existing shared memory");
+            Debug.Log("Could not open existing shared memory");
+            return;
+        }
+
+        UIManager.WriteToLogger("Init shared memory successful");
         Debug.Log("Init shared memory successful");
     }
 
     // Update is called once per frame
     void Update()
     {
-        ReadSharedMemory();
+        if (sharedMemoryInitialized)
+        {
+            ReadSharedMemory();    
+        }
     }
 
     Color[] CreateColorsFromVector4Array(Vector4[] colorsAsVectorArray)
@@ -200,11 +216,16 @@ public class InfiniTAMConnector : MonoBehaviour
         currentBuffer.sharedMemories[0].accessor.Write<MeshInfo>(0, ref answer);
         currentBuffer.sharedMemories[0].Unlock();
         
-        currentBufferNumber = (currentBufferNumber + 1) % 2;
+        currentBufferNumber = (currentBufferNumber + 1) % NUMBUFFERS;
     }
 
     public void OnDestroy()
     {
+        if (sharedMemoryInitialized == false)
+        {
+            return;
+        }
+        
         for (int i = 0; i < 2; i++)
         {
             for (int j = 0; j < sharedMeshBuffers[i].sharedMemories.Length; j++)
