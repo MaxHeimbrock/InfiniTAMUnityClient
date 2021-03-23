@@ -34,14 +34,14 @@ public class UIManager : MonoBehaviour
 
             if (useTracking)
             {
-                InfiniTAMConnector.sendTransformToCam = true;
+                UnityAnimusClient.sendTransformToCam = true;
                 FlyCam.sendTransformToCamera = false;
 
                 trackingStateText.text = "Tracking";
             }
             else
             {
-                InfiniTAMConnector.sendTransformToCam = false;
+                UnityAnimusClient.sendTransformToCam = false;
                 FlyCam.sendTransformToCamera = true;
                 
                 trackingStateText.text = "Free View";

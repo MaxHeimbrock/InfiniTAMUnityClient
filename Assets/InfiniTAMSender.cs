@@ -8,8 +8,6 @@ using UnityEngine;
 
 public class InfiniTAMSender : MonoBehaviour
 {
-	public string testMessage = "Hello test 123";
-	
 	public string ipAddress = "localhost";
 	public int port = 5447;
 	public static InfiniTAMSender instance;
@@ -31,14 +29,6 @@ public class InfiniTAMSender : MonoBehaviour
 		ConnectToTcpServer();
 	}
 	
-	// Update is called once per frame
-	void Update()
-	{
-		if (Input.GetKeyDown(KeyCode.Space))
-		{
-			SendMessage("test 123");
-		}
-	}
 	/// <summary> 	
 	/// Setup socket connection. 	
 	/// </summary> 	
@@ -58,7 +48,7 @@ public class InfiniTAMSender : MonoBehaviour
 	/// <summary> 	
 	/// Send message to server using socket connection. 	
 	/// </summary> 	
-	public new void SendMessage(string message)
+	public new void SendData(int[] header, byte[] data)
 	{
 		if (socketConnection == null)
 		{
@@ -71,10 +61,46 @@ public class InfiniTAMSender : MonoBehaviour
 			if (stream.CanWrite)
 			{
 				// Convert string message to byte array.                 
-				byte[] clientMessageAsByteArray = Encoding.ASCII.GetBytes(message);
+				byte[] headerAsBytes = new byte[header.Length * sizeof(int)];
+				Buffer.BlockCopy(header, 0, headerAsBytes, 0, headerAsBytes.Length);
 				// Write byte array to socketConnection stream.                 
-				stream.Write(clientMessageAsByteArray, 0, clientMessageAsByteArray.Length);
-				Debug.Log("Client sent his message - should be received by server");
+				stream.Write(headerAsBytes, 0, headerAsBytes.Length);
+				Debug.Log("Header sent");
+			}
+			if (stream.CanWrite)
+			{
+				// Convert string message to byte array.                 
+				//byte[] clientMessageAsByteArray = Encoding.ASCII.GetBytes(message);
+				// Write byte array to socketConnection stream.                 
+				stream.Write(data, 0, data.Length);
+				Debug.Log("Data send");
+			}
+		}
+		catch (SocketException socketException)
+		{
+			Debug.Log("Socket exception: " + socketException);
+		}
+	}
+	
+	public new void SendHeader(int[] header)
+	{
+		if (socketConnection == null)
+		{
+			Debug.Log("Noo connection");
+			return;
+		}
+		try
+		{
+			// Get a stream object for writing. 			
+			NetworkStream stream = socketConnection.GetStream();
+			if (stream.CanWrite)
+			{
+				// Convert string message to byte array.                 
+				byte[] headerAsBytes = new byte[header.Length * sizeof(int)];
+				Buffer.BlockCopy(header, 0, headerAsBytes, 0, headerAsBytes.Length);
+				// Write byte array to socketConnection stream.                 
+				stream.Write(headerAsBytes, 0, headerAsBytes.Length);
+				Debug.Log("Header sent");
 			}
 		}
 		catch (SocketException socketException)

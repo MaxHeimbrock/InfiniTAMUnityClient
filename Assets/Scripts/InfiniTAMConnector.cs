@@ -117,6 +117,7 @@ public class InfiniTAMConnector : MonoBehaviour
     
     public void ReadSharedMemory()
     {
+        /*
         Matrix4 cameraPosTemp;
         
         cameraPosSharedMemory.Lock();
@@ -156,7 +157,7 @@ public class InfiniTAMConnector : MonoBehaviour
             Camera.main.transform.rotation = rotTemp;
             Camera.main.transform.position = posTemp;
         }
-        
+        */
         
         MeshInfo meshInfo;
         SharedMeshData currentBuffer = sharedMeshBuffers[currentBufferNumber];
@@ -168,7 +169,6 @@ public class InfiniTAMConnector : MonoBehaviour
         if (meshInfo.meshId < 0)
         {
             return;
-
         }
         else if (clientReady == false && meshInfo.meshId == 1)
         {

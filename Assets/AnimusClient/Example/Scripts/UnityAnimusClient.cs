@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using AnimusClient;
 using Animus.Data;
 using Google.Protobuf.Collections;
@@ -26,6 +27,8 @@ public class UnityAnimusClient : MonoBehaviour
     private bool triggerResChange;
     private RepeatedField<uint> _imageDims;
 
+    public static bool sendTransformToCam = true;
+    
     private void Start()
     { 
 	    
@@ -129,9 +132,17 @@ public class UnityAnimusClient : MonoBehaviour
     	}
     
     	public bool spatial_set(Animus.Data.BlobSample currSample)
-    	{
+        {
+	        int[] header = new int[3];
+	        header[0] = (int)currSample.IntArray[0];
+	        header[1] = (int)currSample.IntArray[1];
+	        header[2] = (int)currSample.IntArray[2];
 	        Debug.Log(currSample.IntArray[0]);
-	        Debug.Log(currSample.BytesArray[0].Length);
+	        Debug.Log(currSample.BytesArray[0].ToByteArray().Length);
+	        
+	        //InfiniTAMSender.instance.SendHeader(header);
+	        InfiniTAMSender.instance.SendData(header, currSample.BytesArray[0].ToByteArray());
+	        
     		return true;
     	}
     
@@ -176,8 +187,11 @@ public class UnityAnimusClient : MonoBehaviour
 		// ROTATION: invert x and z axis
 		Quaternion rotTemp = new Quaternion(-cameraPos.rotation.x, cameraPos.rotation.y, -cameraPos.rotation.z, cameraPos.rotation.w);
 
-		Camera.main.transform.rotation = rotTemp;
-		Camera.main.transform.position = posTemp;
+		if (sendTransformToCam)
+		{
+			Camera.main.transform.rotation = rotTemp;
+			Camera.main.transform.position = posTemp;
+		}
 		
 		//Debug.Log(currSample.Data[0] + ", " + currSample.Data[1] + ", " + currSample.Data[2]);
 		return true;
