@@ -122,6 +122,23 @@ public class UnityAnimusClient : MonoBehaviour
 		return false;
 	}
 	
+	// --------------------------Spatial Modality----------------------------------
+    	public bool spatial_initialise()
+    	{
+    		return true;
+    	}
+    
+    	public bool spatial_set(Animus.Data.BlobSample currSample)
+    	{
+	        Debug.Log(currSample.BytesArray.Count);
+    		return true;
+    	}
+    
+    	public bool spatial_close()
+    	{
+    		return true;
+    	}
+	
 	// --------------------------Proprioception Modality----------------------------------
 	public bool proprioception_initialise()
 	{
@@ -161,7 +178,7 @@ public class UnityAnimusClient : MonoBehaviour
 		Camera.main.transform.rotation = rotTemp;
 		Camera.main.transform.position = posTemp;
 		
-		Debug.Log(currSample.Data[0] + ", " + currSample.Data[1] + ", " + currSample.Data[2]);
+		//Debug.Log(currSample.Data[0] + ", " + currSample.Data[1] + ", " + currSample.Data[2]);
 		return true;
 	}
 
