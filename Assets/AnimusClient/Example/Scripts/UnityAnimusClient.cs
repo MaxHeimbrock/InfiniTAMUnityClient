@@ -130,7 +130,8 @@ public class UnityAnimusClient : MonoBehaviour
     
     	public bool spatial_set(Animus.Data.BlobSample currSample)
     	{
-	        Debug.Log(currSample.BytesArray.Count);
+	        Debug.Log(currSample.IntArray[0]);
+	        Debug.Log(currSample.BytesArray[0].Length);
     		return true;
     	}
     
