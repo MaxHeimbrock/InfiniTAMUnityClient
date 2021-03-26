@@ -65,19 +65,20 @@ public class InfiniTAMConnector : MonoBehaviour
         
         try
         {
-            cameraPosSharedMemory = new SharedMemoryAccess(cameraPosMutexName, cameraPosFileName);
+            //cameraPosSharedMemory = new SharedMemoryAccess(cameraPosMutexName, cameraPosFileName);
             sharedMeshBuffers[0] = new SharedMeshData(0);
             sharedMeshBuffers[1] = new SharedMeshData(1);
             sharedMemoryInitialized = true;
         }
         catch (Exception e)
         {
-            UIManager.WriteToLogger("Client not found.");
-            Debug.Log("Client not found.");
+            UIManager.WriteToLogger("Shared Memory not found with " + e.GetType());
+            Debug.Log("Client not found." + e.GetType());
             return;
         }
 
-        UIManager.WriteToLogger("Client found. Wait shared memory allocation.");
+        // Wait for shared memory allocation of client
+        UIManager.WriteToLogger("Client found. Wait for green light.");
         Debug.Log("Client found. Wait for shared memory allocation.");
     }
 

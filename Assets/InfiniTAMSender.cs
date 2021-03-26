@@ -38,10 +38,12 @@ public class InfiniTAMSender : MonoBehaviour
 		{
 			socketConnection = new TcpClient(ipAddress, port);
 			Debug.Log("Successfully connected to server.");
+			UIManager.WriteToLogger("Socket connection successful.");
 		}
 		catch (Exception e)
 		{
 			Debug.Log("On client connect exception " + e);
+			UIManager.WriteToLogger("Client socket connection failed.");
 		}
 	}
 	

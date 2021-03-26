@@ -15,10 +15,8 @@ public class SharedMemoryAccess
     public SharedMemoryAccess(string mutexName, string mmfName)
     {
         mutex = new Mutex(false, mutexName);
-        
-            mmf = MemoryMappedFile.OpenExisting(mmfName);
-            accessor = mmf.CreateViewAccessor();
-        
+        mmf = MemoryMappedFile.OpenExisting(mmfName);
+        accessor = mmf.CreateViewAccessor();
     }
 
     public void Destroy()
