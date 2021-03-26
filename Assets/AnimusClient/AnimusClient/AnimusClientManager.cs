@@ -226,10 +226,11 @@ namespace AnimusManager
             Debug.Log($"Connecting to chosen robot {chosenRobotDetails.Make} {chosenRobotDetails.Model} called {chosenRobotDetails.Name} with ID {chosenRobotDetails.RobotId}");
             var connectThread = new Thread(() => ThreadedConnectToRobot(chosenRobotDetails));
         
+            connectThread.Start();
+            
             // Multiple connection retries
             for (int i = 0; i < 3; i++)
             {
-                connectThread.Start();
                 while (!connectToRobotFinished)
                 {
                     yield return null;
@@ -247,12 +248,15 @@ namespace AnimusManager
             if (!connectedToRobotSuccess)
             {
                 Debug.LogError($"Failed to connect to robot with ID: {chosenRobotDetails.RobotId}");
+                UIManager.WriteToLogger("Animus connection failed.");
                 CloseInterface();
             }
             else
             {
                 _robotConnectionEstablished = true;
                 _chosenRobotDetails = chosenRobotDetails;
+                UIManager.WriteToLogger("Animus connection successful.");
+                UIManager.SetConnectionState(0, true);
             }
         }
         

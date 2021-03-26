@@ -20,10 +20,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e9fd9d70-1f76-4806-85e7-8c544d89cb49" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.MasterThesis/.idea/contentModel.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.MasterThesis/.idea/contentModel.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.MasterThesis/.idea/indexLayout.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.MasterThesis/.idea/indexLayout.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.MasterThesis/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.MasterThesis/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/InfiniTAMConnector.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/InfiniTAMConnector.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/AnimusClient/AnimusClient/AnimusClientManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/AnimusClient/AnimusClient/AnimusClientManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/InfiniTAMSender.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/InfiniTAMSender.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/InfiniTAMConnector.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/InfiniTAMConnector.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UIManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UIManager.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,6 +46,11 @@
         <option value="$PROJECT_DIR$/Assets/SharedMemoryAccess.cs" />
         <option value="$PROJECT_DIR$/Assets/UIManager.cs" />
         <option value="$PROJECT_DIR$/Assets/InfiniTAMConnector.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/SharedMemoryAccess.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/UIManager.cs" />
+        <option value="$PROJECT_DIR$/Assets/AnimusClient/AnimusClient/AnimusClientManager.cs" />
+        <option value="$PROJECT_DIR$/Assets/InfiniTAMSender.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/InfiniTAMConnector.cs" />
       </list>
     </option>
   </component>
@@ -127,6 +136,8 @@
       <workItem from="1615469486665" duration="505000" />
       <workItem from="1615470110697" duration="178000" />
       <workItem from="1615470872087" duration="1000" />
+      <workItem from="1616773251597" duration="1306000" />
+      <workItem from="1616774834609" duration="1303000" />
     </task>
     <servers />
   </component>

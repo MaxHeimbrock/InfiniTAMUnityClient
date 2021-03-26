@@ -173,7 +173,8 @@ public class InfiniTAMConnector : MonoBehaviour
         }
         else if (clientReady == false && meshInfo.meshId == 1)
         {
-            UIManager.WriteToLogger("Setup complete.");
+            UIManager.WriteToLogger("Shared memory setup complete.");
+            UIManager.SetConnectionState(2, true);
             Debug.Log("Setup complete.");
             clientReady = true;
         }
