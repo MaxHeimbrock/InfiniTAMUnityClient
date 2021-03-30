@@ -133,14 +133,13 @@ public class UnityAnimusClient : MonoBehaviour
     
     	public bool spatial_set(Animus.Data.BlobSample currSample)
         {
-	        int[] header = new int[3];
+	        int[] header = new int[4];
 	        header[0] = (int)currSample.IntArray[0];
 	        header[1] = (int)currSample.IntArray[1];
 	        header[2] = (int)currSample.IntArray[2];
-	        Debug.Log(currSample.IntArray[0]);
-	        Debug.Log(currSample.BytesArray[0].ToByteArray().Length);
+	        header[3] = (int)currSample.IntArray[3];
+	        Debug.Log("Got packet " + currSample.IntArray[3]);
 	        
-	        //InfiniTAMSender.instance.SendHeader(header);
 	        InfiniTAMSender.instance.SendData(header, currSample.BytesArray[0].ToByteArray());
 	        
     		return true;

@@ -68,7 +68,7 @@ public class InfiniTAMSender : MonoBehaviour
 				Buffer.BlockCopy(header, 0, headerAsBytes, 0, headerAsBytes.Length);
 				// Write byte array to socketConnection stream.                 
 				stream.Write(headerAsBytes, 0, headerAsBytes.Length);
-				Debug.Log("Header sent");
+				//Debug.Log("Header sent");
 			}
 			if (stream.CanWrite)
 			{
@@ -76,12 +76,12 @@ public class InfiniTAMSender : MonoBehaviour
 				//byte[] clientMessageAsByteArray = Encoding.ASCII.GetBytes(message);
 				// Write byte array to socketConnection stream.                 
 				stream.Write(data, 0, data.Length);
-				Debug.Log("Data send");
+				//Debug.Log("Data send");
 			}
 		}
 		catch (SocketException socketException)
 		{
-			Debug.Log("Socket exception: " + socketException);
+			Debug.LogError("Socket exception: " + socketException);
 		}
 	}
 	

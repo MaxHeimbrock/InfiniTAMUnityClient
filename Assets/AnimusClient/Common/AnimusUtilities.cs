@@ -239,6 +239,7 @@ namespace AnimusCommon
              AverageFps = ((float) _count) / (numMs / 1000.0f);
              AverageLag = (float) _cumulativeLag*1000 / _count;
 
+             /*
              if (verbose)
              {
                  if (time < 0)
@@ -250,6 +251,7 @@ namespace AnimusCommon
                      Debug.Log($"{_channelName} : {AverageFps:F2} ------- {AverageLag:F2}ms lag -- {_desc}");
                  }
              }
+             */
              _cumulativeLag = 0;
              _count = 0;
              _stpw.Reset();
