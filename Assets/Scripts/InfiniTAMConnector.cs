@@ -105,15 +105,22 @@ public class InfiniTAMConnector : MonoBehaviour
 
     public void UpdateMesh(GameObject mesh, Vector3[] newVertices, Vector3[] normals, int[] faceIndices, Vector4[] colorsAsVectors)
     {
-        Color[] colors = CreateColorsFromVector4Array(colorsAsVectors);
+        try
+        {
+            Color[] colors = CreateColorsFromVector4Array(colorsAsVectors);
         
-        Mesh newMesh = new Mesh();
-        newMesh.vertices = newVertices;
-        newMesh.normals = normals;
-        newMesh.triangles = faceIndices;
-        newMesh.colors = colors;
+            Mesh newMesh = new Mesh();
+            newMesh.vertices = newVertices;
+            newMesh.normals = normals;
+            newMesh.triangles = faceIndices;
+            newMesh.colors = colors;
 
-        mesh.GetComponent<MeshFilter>().mesh = newMesh;
+            mesh.GetComponent<MeshFilter>().mesh = newMesh;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
     }
     
     public void ReadSharedMemory()
