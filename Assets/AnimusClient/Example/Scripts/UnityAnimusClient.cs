@@ -150,13 +150,13 @@ public class UnityAnimusClient : MonoBehaviour
     		return true;
     	}
 	
-	// --------------------------Proprioception Modality----------------------------------
-	public bool proprioception_initialise()
+	// --------------------------SpatialSlam Modality----------------------------------
+	public bool spatialSlam_initialise()
 	{
 		return false;
 	}
 
-	public bool proprioception_set(Float32Array currSample)
+	public bool spatialSlam_set(Float32Array currSample)
 	{
 		Matrix4x4 cameraPos;
 		
@@ -196,7 +196,7 @@ public class UnityAnimusClient : MonoBehaviour
 		return true;
 	}
 
-	public bool proprioception_close()
+	public bool spatialSlam_close()
 	{
 		return false;
 	}

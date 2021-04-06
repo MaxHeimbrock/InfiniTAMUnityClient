@@ -87,7 +87,7 @@ public class ClientLogic : MonoBehaviour
         
         // Step 5 - Starting all modalities
         // var requiredModalities = new string[] {"vision", "audition", "voice" };
-        var requiredModalities = new string[] {"proprioception", "spatial"};
+        var requiredModalities = new string[] {"spatialSlam", "spatial"};
         AnimusManager.OpenModalities(requiredModalities);
     }
 }
