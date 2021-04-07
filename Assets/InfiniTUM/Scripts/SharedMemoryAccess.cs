@@ -1,7 +1,5 @@
-﻿using System;
-using System.IO.MemoryMappedFiles;
+﻿using System.IO.MemoryMappedFiles;
 using System.Threading;
-using UnityEngine;
 
 public class SharedMemoryAccess
 {
